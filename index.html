@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Spreadsheet Data</title>
+</head>
+<body>
+    <h1>Google Spreadsheet Data</h1>
+    <table id="data-table">
+        <thead>
+            <tr id="header-row"></tr>
+        </thead>
+        <tbody id="data-rows"></tbody>
+    </table>
+
+    <script>
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSUDz8LCVxlw2QQLN1Tlw8ZFIV6mqBDM3BUYTpa_CiRXZe3T5kLgRfSlF8no7bfZYZUZUwe2g6vxS3K/pub?output=csv';
+
+        fetch(sheetUrl)
+            .then(response => response.text())
+            .then(csvText => {
+                const rows = csvText.split('\n');
+                const headers = rows[0].split(',');
+                const data = rows.slice(1);
+
+                const headerRow = document.getElementById('header-row');
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+
+                const dataRows = document.getElementById('data-rows');
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    const cells = row.split(',');
+                    cells.forEach(cell => {
+                        const td = document.createElement('td');
+                        td.textContent = cell;
+                        tr.appendChild(td);
+                    });
+                    dataRows.appendChild(tr);
+                });
+            });
+    </script>
+</body>
+</html>
