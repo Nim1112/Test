@@ -30,8 +30,14 @@
         const apiKey = 'AIzaSyBQ1iq-akIrHUWFQldV5rJIy2Xi8UX40Q0';
         const range = 'Sheet1'; // Adjust the range if necessary
 
+        // Correct URL to fetch data
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
             .then(data => {
                 const rows = data.values;
                 const headers = rows[0];
